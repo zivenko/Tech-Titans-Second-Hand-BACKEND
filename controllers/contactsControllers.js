@@ -6,7 +6,8 @@ import {
 } from "../schemas/contactsSchemas.js";
 export const getAllContacts = async (req, res, next) => {
   try {
-    const result = await contactsService.listContacts();
+    const { _id: owner } = req.user;
+    const result = await contactsService.listContacts({ owner });
     res.json(result);
   } catch (error) {
     next(error);
@@ -46,7 +47,9 @@ export const deleteContact = async (req, res, next) => {
 export const createContact = async (req, res, next) => {
   try {
     const body = req.body;
-    const result = await contactsService.addContact(body);
+
+    const { _id: owner } = req.user;
+    const result = await contactsService.addContact({ ...body, owner });
     res.status(201).json(result);
   } catch (error) {
     next(error);
