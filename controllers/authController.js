@@ -53,7 +53,13 @@ export const signin = async (req, res, next) => {
 
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
     await authSevices.updateUser({ _id: id }, { token });
-    res.json({ token });
+    res.json({
+      token,
+      user: {
+        email: user.email,
+        subscription: user.subscription,
+      },
+    });
   } catch (error) {
     next(error);
   }
