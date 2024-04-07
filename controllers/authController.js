@@ -1,11 +1,16 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
+import path from "path";
+import fs from "fs/promises";
+import gravatar from "gravatar";
 import * as authSevices from "../services/authServices.js";
+import Jimp from "jimp";
 
 import HttpError from "../helpers/HttpError.js";
 
 const { JWT_SECRET } = process.env;
+
+const avatarsPath = path.resolve("public", "avatars");
 
 export const signup = async (req, res, next) => {
   try {
@@ -14,11 +19,12 @@ export const signup = async (req, res, next) => {
     if (user) {
       throw HttpError(409, "Email already in use");
     }
-
+    const avatarUrl = gravatar.url(email);
     const hashpassword = await bcrypt.hash(password, 10);
 
     const newUser = await authSevices.signup({
       ...req.body,
+      avatarUrl,
       password: hashpassword,
     });
     res.status(201).json({
@@ -75,10 +81,39 @@ export const getCurrent = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
   try {
-    const { _id } = req.user;
+    const { _id } = req.body;
     await authSevices.updateUser({ _id }, { token: "" });
     res.status(204).json();
   } catch (err) {
     next(err);
+  }
+};
+
+export const updateAvatar = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+
+    const { path: oldPath, filename } = req.file;
+    const newPath = path.join(avatarsPath, filename);
+
+    await fs.rename(oldPath, newPath);
+
+    await Jimp.read(newPath)
+      .then((image) => {
+        return image.resize(250, 250).write(newPath);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+    const avatarUrl = path.join("avatars", filename);
+    const result = await authSevices.updateUser({ _id: id }, { avatarUrl });
+
+    if (!result) {
+      throw HttpError(404, `Contact with ${id} not found`);
+    }
+    res.json({ avatarUrl });
+  } catch (error) {
+    next(error);
   }
 };
