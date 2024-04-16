@@ -64,7 +64,7 @@ export const verify = async (req, res, next) => {
       {
         _id: user._id,
       },
-      { verify: true, verificationCode: "" }
+      { verify: true, verificationCode: " " }
     );
     res.json({
       message: "Verification successful",
@@ -84,15 +84,12 @@ export const verifyResend = async (req, res, next) => {
     if (user.verify) {
       throw HttpError(400, "Email already veryfied");
     }
-
     const verifyEmail = {
       to: email,
       subject: "Verify email",
-      html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationCode}">Click verify email</a>`,
+      html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${user.verificationCode}">Click verify email!!!</a>`,
     };
-
     await sendEmail(verifyEmail);
-
     res.json({
       message: "Verify email sent",
     });
