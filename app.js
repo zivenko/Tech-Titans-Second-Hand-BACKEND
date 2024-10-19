@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import "dotenv/config";
 
 import authRouter from "./routes/authRouter.js";
-import contactsRouter from "./routes/contactsRouter.js";
+import carsRouter from "./routes/carsRouter.js";
 
 const app = express();
 
@@ -15,13 +15,13 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.use("/api/users", authRouter);
-app.use("/api/contacts", contactsRouter);
+app.use("/api/cars", carsRouter);
 
 app.use((_, res) => {
   res.status(404).json({ message: "Route not found" });
 });
 
-app.use((err, req, res, next) => {
+app.use((err, _, res)=> {
   const { status = 500, message = "Server error" } = err;
   res.status(status).json({ message });
 });

@@ -1,10 +1,10 @@
 import { Schema, model } from "mongoose";
 import { handleDBError, setUpdateSettings } from "./hooks.js";
-const contactSchema = new Schema(
+const carsSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, "Set name for contact"],
+      required: [true, "Set car name, pls"],
     },
     email: {
       type: String,
@@ -24,12 +24,12 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-contactSchema.post("save", handleDBError);
+carsSchema.post("save", handleDBError);
 
-contactSchema.pre("findOneAndUpdate", setUpdateSettings);
+carsSchema.pre("findOneAndUpdate", setUpdateSettings);
 
-contactSchema.post("findOneAndUpdate", handleDBError);
+carsSchema.post("findOneAndUpdate", handleDBError);
 
-const Contact = model("contact", contactSchema);
+const Cars = model("cars", carsSchema);
 
-export default Contact;
+export default Cars;

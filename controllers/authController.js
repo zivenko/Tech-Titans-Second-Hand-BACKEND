@@ -39,7 +39,7 @@ export const signup = async (req, res, next) => {
       html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationCode}">Click verify email</a>`,
     };
 
-    await sendEmail(verifyEmail);
+    //await sendEmail(verifyEmail);
 
     res.status(201).json({
       user: {
@@ -174,7 +174,7 @@ export const updateAvatar = async (req, res, next) => {
     const result = await authSevices.updateUser({ _id: id }, { avatarUrl });
 
     if (!result) {
-      throw HttpError(404, `Contact with ${id} not found`);
+      throw HttpError(404, `Car with ${id} not found`);
     }
     res.json({ avatarUrl });
   } catch (error) {

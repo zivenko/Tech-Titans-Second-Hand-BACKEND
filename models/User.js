@@ -13,8 +13,8 @@ const userSchema = new Schema(
     },
     subscription: {
       type: String,
-      enum: ["starter", "pro", "business"],
-      default: "starter",
+      enum: ["buyer", "seller"],
+      default: "seller",
     },
     avatarUrl: {
       type: String,
@@ -25,7 +25,7 @@ const userSchema = new Schema(
     },
     verify: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     verificationCode: {
       type: String,
