@@ -15,8 +15,12 @@ const commentsRouter = express.Router();
 
 commentsRouter.use(authenticate);
 
+
+// GET /api/comments/ 
 commentsRouter.get("/", getCommentsAndReplies);
+// POST /api/comments/
 commentsRouter.post("/", validateBody(addCommentSchema), createComment);
+// POST /api/comments/reply
 commentsRouter.post("/reply", validateBody(addReplySchema), addReply);
 
 

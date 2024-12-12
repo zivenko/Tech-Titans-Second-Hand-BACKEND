@@ -4,7 +4,7 @@ import HttpError from "../helpers/HttpError.js";
 
 export const getContacts = async (req, res, next) => {
   try {
-    const result = await congetOnecontacttactsService.getContacts();
+    const result = await contactsService.getContacts();
     res.json(result);
   } catch (error) {
     next(error);

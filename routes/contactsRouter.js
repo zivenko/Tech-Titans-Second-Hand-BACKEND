@@ -16,15 +16,19 @@ import isValidId from "../midlewares/isValidId.js";
 
 const contactsRouter = express.Router();
 
+// GET /api/contacts/ 
 contactsRouter.get("/", getContacts);
 
+// GET /api/contacts/:id
 contactsRouter.get("/:id", isValidId, getOneContact);
 
+// DELETE /api/contacts/:id
 contactsRouter.delete("/:id", isValidId, deleteContact);
 
+// POST /api/contacts/
 contactsRouter.post("/", validateBody(createContactsSchema), createContact);
 
-
+// PATCH /api/contacts/:id/read
 contactsRouter.patch(
   "/:id/read",
   isValidId,
